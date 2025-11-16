@@ -9,7 +9,7 @@ import {
   recordFailedAttempt,
   resetAttempts,
   isBlocked,
-} from "@/libTEMP/userStore";
+} from "@/lib/userStore";
 
 export const authOptions: NextAuthOptions = {
   providers: [
