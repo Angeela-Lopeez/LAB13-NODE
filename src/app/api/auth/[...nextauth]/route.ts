@@ -17,6 +17,7 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
+
     GithubProvider({
       clientId: process.env.GITHUB_ID!,
       clientSecret: process.env.GITHUB_SECRET!,
@@ -36,7 +37,7 @@ export const authOptions: NextAuthOptions = {
         const email = credentials.email;
 
         if (isBlocked(email)) {
-          throw new Error("Too many failed attempts. Please try again later.");
+          throw new Error("Too many failed attempts. Try again later.");
         }
 
         const user = await findUserByEmail(email);
@@ -67,7 +68,9 @@ export const authOptions: NextAuthOptions = {
     signIn: "/signin",
   },
 
-  session: { strategy: "jwt" },
+  session: {
+    strategy: "jwt",
+  },
 
   callbacks: {
     async jwt({ token, user }) {
@@ -82,10 +85,10 @@ export const authOptions: NextAuthOptions = {
 
     async session({ session, token }) {
       session.user = {
-        id: token.id as string,
-        name: token.name as string,
-        email: token.email as string,
-        image: token.image as string | null,
+        id: (token.id ?? "") as string,
+        name: (token.name ?? "") as string,
+        email: (token.email ?? "") as string,
+        image: (token.image ?? null) as string | null,
       };
 
       return session;
