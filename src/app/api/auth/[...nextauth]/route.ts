@@ -14,17 +14,16 @@ import {
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
-
     GithubProvider({
-      clientId: process.env.GITHUB_ID as string,
-      clientSecret: process.env.GITHUB_SECRET as string,
+      clientId: process.env.GITHUB_ID!,
+      clientSecret: process.env.GITHUB_SECRET!,
     }),
 
     CredentialsProvider({
-      id: "credentials",   // 🔥 IMPORTANTE 🔥
+      id: "credentials",
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email" },
@@ -37,9 +36,7 @@ export const authOptions: NextAuthOptions = {
         const email = credentials.email;
 
         if (isBlocked(email)) {
-          throw new Error(
-            "Too many failed attempts. Please try again in a few minutes."
-          );
+          throw new Error("Too many failed attempts. Please try again later.");
         }
 
         const user = await findUserByEmail(email);
@@ -70,13 +67,10 @@ export const authOptions: NextAuthOptions = {
     signIn: "/signin",
   },
 
-  session: {
-    strategy: "jwt",
-  },
+  session: { strategy: "jwt" },
 
   callbacks: {
     async jwt({ token, user }) {
-      // Se ejecuta cuando el usuario inicia sesión
       if (user) {
         token.id = user.id;
         token.name = user.name;
@@ -87,7 +81,6 @@ export const authOptions: NextAuthOptions = {
     },
 
     async session({ session, token }) {
-      // Asegurar que session.user SIEMPRE exista
       session.user = {
         id: token.id as string,
         name: token.name as string,
@@ -98,7 +91,6 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-
 };
 
 const handler = NextAuth(authOptions);
