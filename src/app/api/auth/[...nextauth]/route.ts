@@ -9,7 +9,7 @@ import {
   recordFailedAttempt,
   resetAttempts,
   isBlocked,
-} from "@/lib2/userStore";
+} from "@/lib/userStore";
 
 export const authOptions: NextAuthOptions = {
   providers: [
