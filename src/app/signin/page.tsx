@@ -89,7 +89,7 @@ export default function LoginPage() {
 
         {/* GOOGLE */}
         <button
-          onClick={() => signIn("google")}
+          onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
           className="w-full flex items-center justify-center gap-2 py-3 
           bg-red-600 hover:bg-red-700 text-white rounded-xl font-medium shadow-sm transition"
         >
@@ -99,7 +99,7 @@ export default function LoginPage() {
 
         {/* GITHUB */}
         <button
-          onClick={() => signIn("github")}
+          onClick={() => signIn("github", { callbackUrl: "/dashboard" })}
           className="w-full flex items-center justify-center gap-2 py-3 mt-3
           bg-gray-900 hover:bg-black text-white rounded-xl font-medium shadow-sm transition"
         >

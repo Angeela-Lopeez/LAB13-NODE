@@ -76,6 +76,7 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async jwt({ token, user }) {
+      // Se ejecuta cuando el usuario inicia sesión
       if (user) {
         token.id = user.id;
         token.name = user.name;
@@ -86,16 +87,18 @@ export const authOptions: NextAuthOptions = {
     },
 
     async session({ session, token }) {
-      if (!session.user) session.user = {} as any;
-
-      session.user.id = token.id as string;
-      session.user.name = token.name as string;
-      session.user.email = token.email as string;
-      session.user.image = token.image as string | null;
+      // Asegurar que session.user SIEMPRE exista
+      session.user = {
+        id: token.id as string,
+        name: token.name as string,
+        email: token.email as string,
+        image: token.image as string | null,
+      };
 
       return session;
     },
   },
+
 };
 
 const handler = NextAuth(authOptions);

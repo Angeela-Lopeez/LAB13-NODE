@@ -3,8 +3,7 @@ import { createUser, findUserByEmail } from "@/lib/userStore";
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const { name, email, password } = body;
+    const { name, email, password } = await req.json();
 
     if (!name || !email || !password) {
       return NextResponse.json(
@@ -13,19 +12,20 @@ export async function POST(req: Request) {
       );
     }
 
-    const existing = await findUserByEmail(email);
-    if (existing) {
+    const exists = await findUserByEmail(email);
+    if (exists) {
       return NextResponse.json(
         { error: "El correo ya está registrado" },
         { status: 400 }
       );
     }
 
-    await createUser({ name, email, password });
+    // ✔ FIX: llama correctamente a createUser
+    await createUser(name, email, password);
 
-    return NextResponse.json({ ok: true });
-  } catch (error) {
-    console.error(error);
+    return NextResponse.json({ ok: true }, { status: 201 });
+  } catch (err) {
+    console.error("REGISTER ERROR:", err);
     return NextResponse.json(
       { error: "Error en el servidor" },
       { status: 500 }
